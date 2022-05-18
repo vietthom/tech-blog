@@ -17,7 +17,7 @@ const sessionSettings = {
     saveUnitialized: false,
 };
 
-app.engine('handlers', hbs.engine);
+app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 
 app.use(express.json());
