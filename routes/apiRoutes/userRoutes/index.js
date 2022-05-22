@@ -1,6 +1,9 @@
 const router = require('express').Router();
+const bcrypt = require('bcryptjs');
+
 const {
     createUser,
+    getAllUsers,
     getUserById,
     login,
     signupHandler,
@@ -8,13 +11,14 @@ const {
 }= require('../../../controllers/userController');
 
 router.route('/')
-    .post(createUser);
+    .get(getAllUsers)
+        .post(createUser)
 
 router.post('/signup', signupHandler);
 router.post('/login', login);
 router.post('/logout', logout);
 
-router.route('/:id')
+router.route('/:userId')
     .get(getUserById);
 
 module.exports = router;
