@@ -2,6 +2,7 @@ const router = require('express').Router();
 const apiRoutes = Require('./apiRoutes');
 const postRoutes = require('./apiRoutes/postRoutes');
 const commentRoutes = require('./apiRoutes/commentRoutes');
+const dashboardRoutes = require('../routes/dashboardRoutes');
 const { loginView, signupView } = require('../controllers/userController');
 const { homePosts, createPostView } = require('../controllers/postController');
 
@@ -11,7 +12,7 @@ router.get('/signup', signupView);
 router.get('/newPost', createPostView);
 
 router.use('/posts', postRoutes );
-
+router.use('/dashboard', dashboardRoutes);
 router.use('/comments', commentRoutes);
 router.use('/api', apiRoutes);
 
