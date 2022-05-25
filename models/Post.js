@@ -1,4 +1,4 @@
-const { Model, DataTypes } = require('sequelize');
+const { Model, DataTypes, UUIDV4 } = require('sequelize');
 const sequelize = require('../config');
 
 class Post extends Model {}
@@ -6,27 +6,20 @@ class Post extends Model {}
 Post.init(
     {
         id: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
+            type: DataTypes.UUID,
+            defaultValue: UUIDV4,
             primaryKey: true,
-            autoIncrement: true
         },
         title: {
             type: DataTypes.STRING,
             allowNull: false,
-            validate: {
-                len:[1]
-            }
         },
-        post_text: {
+        body: {
             type: DataTypes.TEXT,
             allowNull: false,
-            validate: {
-                len: [1]
-            }
         },
-        user_id: {
-            type: DataTypes.INTEGER,
+        userId: {
+            type: DataTypes.UUID,
             reference: {
                 model: 'user',
                 key: 'id'
@@ -35,8 +28,8 @@ Post.init(
     },
     {
         sequelize,
+        timestamps: true,
         freezeTableName: true,
-        underscored: true,
         modelName: 'post'
     }
 );

@@ -1,4 +1,4 @@
-const { Model, DataTypes } = require('sequelize');
+const { Model, DataTypes, UUIDV4 } = require('sequelize');
 const sequelize = require('../config');
 
 class Comment extends Model {}
@@ -6,10 +6,9 @@ class Comment extends Model {}
 Comment.init(
     {
         id: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.UUID,
             primaryKey: true,
-            allowNull: false,
-            autoIncrement: true
+            defaultValue: UUIDV4,
         },
         comment_text: {
             type: DataTypes.STRING,
@@ -18,17 +17,15 @@ Comment.init(
                 len:[1]
             }
         },
-        user_id: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
+        userId: {
+            type: DataTypes.UUID,
             referencee: {
                 model: 'user',
                 key: 'id'
             }
         },
-        post_id: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
+        postId: {
+            type: DataTypes.UUID,
             reference: {
                 model: 'post',
                 key: 'id'

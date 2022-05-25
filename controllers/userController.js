@@ -1,5 +1,4 @@
 const { User } = require('../models');
-// const auth = require('../utils/auth');
 const bcrypt = require('bcryptjs');
 
 module.exports = { 
@@ -17,11 +16,11 @@ module.exports = {
         }
     }, 
 
-    getAllUsers: async (req, res) => {
+    getAllUsers: async (_req, res) => {
         try {
             const userData = await User.findAll({});
-        const users= userData.map(user => user.get({plain:true}));
-        res.json(users);
+            const users= userData.map(user => user.get({plain:true}));
+            res.json(users);
         } catch (error) {
             res.json(error);
         }
@@ -49,7 +48,7 @@ module.exports = {
             return res.status(400).json({error: 'You must provide a valid email and password'});
         }
         try {
-            const userData = await User.findAll({
+            const userData = await User.findOne({
                 where: {
                     email: req.body.email
                 }
@@ -86,7 +85,7 @@ module.exports = {
                 req.session.loggedIn = true;
                 req.session.user = user;
                 req.session.user_id = user.id;
-                res.json({ success: true});
+                res.json({ success: true });
             });
         } catch(error) {
             res.json(error);
