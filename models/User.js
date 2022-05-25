@@ -1,20 +1,16 @@
-const {Model, DataTypes} = require('sequelize');
+const { UUIDV4, Model, DataTypes} = require('sequelize');
 const sequelize = require('../config');
 const bcrypt = require('bcrypt');
 
-class User extends Model {
-    verifyPassword(loginPassword) {
-        return bcrypt.compareSync(loginPassword, this.password);
-    }
-}
+class User extends Model {}
 
 User.init(
     {
         id: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.UUID,
             allowNull: false,
             primaryKey: true,
-            autoIncrement: true
+            defaultValue: true,
         },
         username: {
             type: DataTypes.STRING,
@@ -37,21 +33,22 @@ User.init(
         }
     },
     {
+        sequelize,
+        timestamps: true,
+        freezeTableName: true,
+        modelName: 'User',
         hooks: {
-            async beforeCreate(newUserData){
-                newUserData.password=await bcrypt.hash(newUserData.password, 10)
-                return newUserData;
+            beforeCreate: async (user) =>{
+                const hashPassword = await bcrypt.hash(user.password, 10);
+                user.email = user.email.toLowerCase();
+                user.password = hashPassword;
+                return user;
             },
-            async beforeUpdate(updatedUserData){
-                updatedUserData.password= await bcrypt.hash(updatedUserData.password, 10)
-                return updatedUserData;
+            beforeUpdate: async (user) =>{
+                user.email = user.email.toLowerCase();
+                return user;
             }
         },
-        sequelize,
-        timestamps: false,
-        freezeTableName: true,
-        underscored: true,
-        modelName: 'user'
     });
 
     module.exports = User;
