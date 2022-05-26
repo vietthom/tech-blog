@@ -1,0 +1,23 @@
+<div class="container mb-4">
+    <div class="card mt-4">
+        <div class="card-header bg-dark">
+            <div class="title text-center">{{ post.title }}</div>
+            <div class="text-end"><strong>Submitted by {{ cap_first_letter post.User.username }} on {{ format_date post.createdAt}}</strong> </div>
+        </div>
+        <div class="card-body text-dark">
+            <p class="card-text">{{ post.body }}</p>
+        </div>
+        {{#if loggedInUser }}
+            <div class="container mt-4">
+                <form>
+                    <div class="form-floating mt-2">
+                        <textarea class="form-control" placeholder="Leave a comment here" id="commentField" style="height: 150px"></textarea>
+                        <label for="body">Post a comment</label>
+                    </div>
+                    <button type="submit" id="commentBtn" class="btn btn-dark mt-2">Add a Comment</button>
+                </form>
+            </div>
+        {{/if}}
+        {{> comments post.comments }}
+    </div>
+</div>
