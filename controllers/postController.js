@@ -7,7 +7,7 @@ module.exports = {
             const newPost = await Post.create({
                 title,
                 body,
-                userId: req.session.user_id
+                userId: req.session.user.id
             })
         res.json({newPost});
         } catch (error) {
@@ -47,7 +47,7 @@ module.exports = {
                 ],
                 order: ['createdAt', 'DESC']
             });
-            const posts = postsData.map(post => post.get({plain: true}));
+            const posts = postData.map(post => post.get({plain: true}));
             res.render('allPosts', {
                 posts
             });
@@ -140,6 +140,11 @@ module.exports = {
     },
     deletePost: async (req, res) =>{
         try {
+            await Comment.destroy({
+                where: {
+                    postId: req.params.postId
+                }
+            });
             await Post.destroy({
                 where: {
                     id: req.params.postId
@@ -147,7 +152,7 @@ module.exports = {
             });
             res.json({success})
         } catch (error) {
-            res.json(error)
+            res.json(error);
         }
     }
 }
